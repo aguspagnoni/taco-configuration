@@ -33,6 +33,7 @@ public class ChangeSettings implements IObjectActionDelegate {
 			shell,
 			"Taco-configs-plugin",
 			"Config was executed.");
+		System.out.println("Holis");
 	}
 
 	/**
