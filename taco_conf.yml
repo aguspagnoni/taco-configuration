@@ -1,0 +1,111 @@
+KeyBuildJavaTrace:
+    modify: true
+    default: false
+KeyAbstractSignatureObject:
+    modify: true
+    default: true
+KeyAttemptToCorrectBug:
+    modify: false
+    default: false
+KeyCheckArithmeticException:
+    modify: true
+    default: true
+KeyCheckNullDereference:
+    modify: true
+    default: true
+KeyClasses:
+    modify: true
+    klass: "String"
+    default: "fullyQualifiedName"
+    # "ejercicios.AVLTree, ejercicios.AVLNode"
+    regex: "([a-zA-Z_$][a-zA-Z\d_$]*\.)*[a-zA-Z_$][a-zA-Z\d_$]*(,([a-zA-Z_$][a-zA-Z\d_$]*\.)*[a-zA-Z_$][a-zA-Z\d_$]*)*"
+KeyDisableIntegerLiteralReduction:
+    modify: false
+    default: true
+KeyGenerateUnitTestCase:
+    modify: true
+    default: true
+KeyIncludeSimulationProgramDeclaration:
+    modify: false
+    default: false
+KeyInferScope:
+    modify: true
+    default: true
+KeyIntBithwidth:
+    modify: true
+    default: 3
+KeyJMLObjectSequenceToAlloySequence:
+    modify: false
+    default: true
+KeyJMLObjectSetToAlloySet:
+    modify: false
+    default: true
+KeyLoopUnroll:
+    modify: true
+    default: 3
+KeyMaxStrykerMethodsPerFile:
+    modify: false
+    default: 0
+KeyModularReasoning:
+    modify: true
+    default: false
+KeyNestedLoopUnroll:
+    modify: false
+    default: true
+KeyNoVerify:
+    modify: false
+    default: false
+KeyNumericTypeQuantificationRange:
+    modify: true
+    total_parameters: 2
+    default:
+      a: 0
+      b: 3
+KeyObjectScope:
+    modify: true
+    default: 3
+KeyRelevancyAnalysis:
+    modify: true
+    default: true
+KeyRelevantClasses:
+    modify: true
+    klass: "String"
+    default: "fullyQualifiedName"
+    # "ejercicios.AVLTree, ejercicios.AVLNode"
+    regex: "([a-zA-Z_$][a-zA-Z\d_$]*\.)*[a-zA-Z_$][a-zA-Z\d_$]*(,([a-zA-Z_$][a-zA-Z\d_$]*\.)*[a-zA-Z_$][a-zA-Z\d_$]*)*"
+KeyRemoveExitWhileGuard:
+    modify: true
+    default: false
+KeyRemoveQuantifiers:
+    modify: false
+    default: true
+KeySkolemizeInstanceAbstraction:
+    modify: false
+    default: false
+KeySkolemizeInstanceInvariant:
+    modify: false
+    default: false
+KeyStringBithwidth:
+    modify: false
+    default: 3
+KeyTypeScopes:
+    klass: "String"
+    modify: true
+    default: "fullyQualifiedName:Scope"
+    # "ejercicios.AVLTree:1, ejercicios.AVLNode:6"
+    regex: "([a-zA-Z_$][a-zA-Z\d_$]*\.)*[a-zA-Z_$][a-zA-Z\d_$]*:[0-9]+(,([a-zA-Z_$][a-zA-Z\d_$]*\.)*[a-zA-Z_$][a-zA-Z\d_$]*:[0-9]+)*"
+KeyUseJavaArithmetic:
+    modify: true
+    default: true
+KeyUseJavaSBP:
+    modify: true
+    default: true
+KeyUseMaxSequenceLength:
+    modify: false
+    default: true
+KeyUseTightUpperBounds:
+    modify: true
+    default: true
+Skolemize:
+    modify: false
+    default: true
