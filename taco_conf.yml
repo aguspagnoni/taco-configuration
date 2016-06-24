@@ -1,62 +1,98 @@
 KeyBuildJavaTrace:
     modify: true
     default: false
+    klass: "Boolean"
+    total_parameters: 1
 KeyAbstractSignatureObject:
     modify: true
     default: true
+    klass: "Boolean"
+    total_parameters: 1
 KeyAttemptToCorrectBug:
     modify: false
     default: false
+    klass: "Boolean"
+    total_parameters: 1
 KeyCheckArithmeticException:
     modify: true
     default: true
+    klass: "Boolean"
+    total_parameters: 1
 KeyCheckNullDereference:
     modify: true
     default: true
+    klass: "Boolean"
+    total_parameters: 1
 KeyClasses:
     modify: true
     klass: "String"
     default: "fullyQualifiedName"
+    total_parameters: 1
     # "ejercicios.AVLTree, ejercicios.AVLNode"
     regex: "([a-zA-Z_$][a-zA-Z\d_$]*\.)*[a-zA-Z_$][a-zA-Z\d_$]*(,([a-zA-Z_$][a-zA-Z\d_$]*\.)*[a-zA-Z_$][a-zA-Z\d_$]*)*"
 KeyDisableIntegerLiteralReduction:
     modify: false
     default: true
+    klass: "Boolean"
+    total_parameters: 1
 KeyGenerateUnitTestCase:
     modify: true
     default: true
+    klass: "Boolean"
+    total_parameters: 1
 KeyIncludeSimulationProgramDeclaration:
     modify: false
     default: false
+    klass: "Boolean"
+    total_parameters: 1
 KeyInferScope:
     modify: true
     default: true
+    klass: "Boolean"
+    total_parameters: 1
 KeyIntBithwidth:
     modify: true
     default: 3
+    klass: "Integer"
+    total_parameters: 1
 KeyJMLObjectSequenceToAlloySequence:
     modify: false
     default: true
+    klass: "Boolean"
+    total_parameters: 1
 KeyJMLObjectSetToAlloySet:
     modify: false
     default: true
+    klass: "Boolean"
+    total_parameters: 1
 KeyLoopUnroll:
     modify: true
     default: 3
+    klass: "Integer"
+    total_parameters: 1
 KeyMaxStrykerMethodsPerFile:
     modify: false
+    klass: "Integer"
     default: 0
+    total_parameters: 1
 KeyModularReasoning:
     modify: true
     default: false
+    klass: "Boolean"
+    total_parameters: 1
 KeyNestedLoopUnroll:
     modify: false
     default: true
+    klass: "Boolean"
+    total_parameters: 1
 KeyNoVerify:
     modify: false
     default: false
+    klass: "Boolean"
+    total_parameters: 1
 KeyNumericTypeQuantificationRange:
     modify: true
+    klass: "Integer"
     total_parameters: 2
     default:
       a: 0
@@ -64,48 +100,74 @@ KeyNumericTypeQuantificationRange:
 KeyObjectScope:
     modify: true
     default: 3
+    klass: "Integer"
+    total_parameters: 1
 KeyRelevancyAnalysis:
     modify: true
     default: true
+    klass: "Boolean"
+    total_parameters: 1
 KeyRelevantClasses:
     modify: true
     klass: "String"
     default: "fullyQualifiedName"
+    total_parameters: 1
     # "ejercicios.AVLTree, ejercicios.AVLNode"
     regex: "([a-zA-Z_$][a-zA-Z\d_$]*\.)*[a-zA-Z_$][a-zA-Z\d_$]*(,([a-zA-Z_$][a-zA-Z\d_$]*\.)*[a-zA-Z_$][a-zA-Z\d_$]*)*"
 KeyRemoveExitWhileGuard:
     modify: true
     default: false
+    klass: "Boolean"
+    total_parameters: 1
 KeyRemoveQuantifiers:
     modify: false
     default: true
+    klass: "Boolean"
+    total_parameters: 1
 KeySkolemizeInstanceAbstraction:
     modify: false
     default: false
+    klass: "Boolean"
+    total_parameters: 1
 KeySkolemizeInstanceInvariant:
     modify: false
     default: false
+    klass: "Boolean"
+    total_parameters: 1
 KeyStringBithwidth:
     modify: false
     default: 3
+    klass: "Integer"
+    total_parameters: 1
 KeyTypeScopes:
     klass: "String"
     modify: true
     default: "fullyQualifiedName:Scope"
+    total_parameters: 1
     # "ejercicios.AVLTree:1, ejercicios.AVLNode:6"
     regex: "([a-zA-Z_$][a-zA-Z\d_$]*\.)*[a-zA-Z_$][a-zA-Z\d_$]*:[0-9]+(,([a-zA-Z_$][a-zA-Z\d_$]*\.)*[a-zA-Z_$][a-zA-Z\d_$]*:[0-9]+)*"
 KeyUseJavaArithmetic:
     modify: true
     default: true
+    klass: "Boolean"
+    total_parameters: 1
 KeyUseJavaSBP:
     modify: true
     default: true
+    klass: "Boolean"
+    total_parameters: 1
 KeyUseMaxSequenceLength:
     modify: false
     default: true
+    klass: "Boolean"
+    total_parameters: 1
 KeyUseTightUpperBounds:
     modify: true
     default: true
+    klass: "Boolean"
+    total_parameters: 1
 Skolemize:
     modify: false
     default: true
+    klass: "Boolean"
+    total_parameters: 1
