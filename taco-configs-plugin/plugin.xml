@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            id="taco-configs-plugin.contribution1"
+            objectClass="org.eclipse.core.internal.resources.File">
+         <menu
+               icon="super_taco.png"
+               id="taco-configs-plugin.menu1"
+               label="Taco Settings"
+               path="additions">
+            <separator
+                  name="aaaaaaaaagulo">
+            </separator>
+         </menu>
+         <action
+               class="tacoconfigsplugin.popup.actions.ChangeSettings"
+               enablesFor="1"
+               id="taco-configs-plugin.newAction"
+               label="Config AGULOOOO"
+               menubarPath="taco-configs-plugin.menu1/group1">
+         </action>
+      </objectContribution>
+   </extension>
+
+</plugin>
