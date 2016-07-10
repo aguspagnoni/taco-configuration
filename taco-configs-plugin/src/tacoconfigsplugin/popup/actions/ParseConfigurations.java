@@ -34,7 +34,7 @@ public class ParseConfigurations {
 					if (line.contains(configMethodName)) {
 						List<Config> configs = configurations.get(currentMethodName);
 						String[] configNameAndValue = fetchConfig(line);
-//						TODO: Editar en fetchConfig configNameAndValue[2] poner el tipo de config según ConfigType 
+//						TODO: Editar en fetchConfig configNameAndValue[2] poner el tipo de config segï¿½n ConfigType 
 //						Config config = new Config(configNameAndValue[0], configNameAndValue[1], ConfigType.valueOf(configNameAndValue[2]));
 						Config config = new Config(configNameAndValue[0], configNameAndValue[1], ConfigType.String);
 						configs.add(config);
@@ -61,6 +61,7 @@ public class ParseConfigurations {
 		String configName = "";
 		String configValue = "";
 		String totalMethodName = "";
+		String configType = "";
 		boolean configNameRead = false;
 		boolean configValueRead = false;
 		line = line.replaceAll("\t", "").replaceAll(" ", "").replaceAll("\n", "");
@@ -86,7 +87,43 @@ public class ParseConfigurations {
 				totalMethodName += c;				
 			}
 		}
-		String[] ans = {configName, configValue};
+		
+		if (isIntegerClass(configValue)) {
+			configType = ConfigType.Integer.toString();
+		} else if (isDoubleClass(configValue)){
+			configType = ConfigType.Double.toString();
+		} else if (isBooleanClass(configValue)) {
+			configType = ConfigType.Boolean.toString();
+		} else {
+			configType = ConfigType.String.toString();
+		}
+		
+		String[] ans = {configName, configValue, configType};
 		return ans;
+	}
+	
+	boolean isIntegerClass(String value) {
+		try {
+			Integer.valueOf(value);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
+	boolean isDoubleClass(String value) {
+		try {
+			Double.valueOf(value);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
+	boolean isBooleanClass(String value) {
+		if(value.toLowerCase().equals("true") || value.toLowerCase().equals("false")) {
+			return true;
+		}
+		return false;
 	}
 }

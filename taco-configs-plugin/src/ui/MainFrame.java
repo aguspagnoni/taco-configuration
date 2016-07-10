@@ -29,7 +29,7 @@ public class MainFrame extends JFrame implements WindowListener, ActionListener,
 	private final JFileChooser fc = new JFileChooser();
 	private JButton button;
 	private SelectFileDialog selectFileDialog = new SelectFileDialog(this, "Select File Dialog");
-	private String testFile = "C:/Users/Federico/git/itba/avmc/taco-configuration/taco-configs-plugin/src/tacoconfigsplugin/popup/actions/TestClass.java";
+	private String testFile = "/Users/falderet/repository/taco-configuration/taco-configs-plugin/src/tacoconfigsplugin/popup/actions/TestClass.java";
 	
 	public static void main(String[] args) {
 		try {
