@@ -7,6 +7,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -57,11 +58,12 @@ public class MainFrame extends JFrame implements WindowListener, ActionListener,
 			}
 		});
 		selectFileDialog.setVisible(false);
-		HashMap<String, Config> configMap = new ParseConfigurations(testFile).configurations();
+		HashMap<String, List<Config>> configMap = new ParseConfigurations(testFile).configurations();
 		for (String method : configMap.keySet()) {
-			Config configuration = configMap.get(method);
-			JLabel label = new JLabel(configuration.name());
-			add(label);
+			for (Config config : configMap.get(method)) {
+				JLabel label = new JLabel(config.name());
+				add(label);
+			}
 		}
 		JTextField exampleTF = new JTextField(60);
 		exampleTF.addActionListener(new ActionListener() {

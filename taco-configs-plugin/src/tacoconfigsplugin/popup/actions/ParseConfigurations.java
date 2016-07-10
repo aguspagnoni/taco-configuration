@@ -4,14 +4,15 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-import jdk.internal.util.xml.impl.Pair;
 import tacoconfigsplugin.popup.actions.Config.ConfigType;
 
 public class ParseConfigurations {
 	private BufferedReader br;
-	private HashMap<String, Config> configurations = new HashMap<>();
+	private HashMap<String, List<Config>> configurations = new HashMap<>();
 	public static String testMethodSignature = "public void test_";
 	public static String configMethodName = "setConfigKey";
 	
@@ -24,23 +25,24 @@ public class ParseConfigurations {
 		}
 	}
 	
-	public HashMap<String, Config> configurations() {
+	public HashMap<String, List<Config>> configurations() {
 		String line = "";
 		String currentMethodName = "";
 		try {
 			while ((line = br.readLine()) != null) {
 				if (currentMethodName != "") {
 					if (line.contains(configMethodName)) {
+						List<Config> configs = configurations.get(currentMethodName);
 						String[] configNameAndValue = fetchConfig(line);
-						//TODO: Editar en fetchConfig configNameAndValue[2] poner el tipo de config según ConfigType 
+//						TODO: Editar en fetchConfig configNameAndValue[2] poner el tipo de config según ConfigType 
 //						Config config = new Config(configNameAndValue[0], configNameAndValue[1], ConfigType.valueOf(configNameAndValue[2]));
 						Config config = new Config(configNameAndValue[0], configNameAndValue[1], ConfigType.String);
-						configurations.put(currentMethodName, config);
+						configs.add(config);
 					}
 				}
 				if (line.contains(testMethodSignature)) {
 					currentMethodName = fetchMethodName(line);
-					configurations.put(currentMethodName, null); 
+					configurations.put(currentMethodName, new ArrayList<Config>()); 
 				}
 			}
 		} catch (IOException e) {
