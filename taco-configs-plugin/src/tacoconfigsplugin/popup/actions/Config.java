@@ -45,12 +45,16 @@ public class Config {
 		return configType.equals(ConfigType.String);
 	}
 	
-	public boolean isNumeric() {
-		return configType.equals(ConfigType.Numeric);
+	public boolean isInteger() {
+		return configType.equals(ConfigType.Integer);
+	}
+	
+	public boolean isDouble() {
+		return configType.equals(ConfigType.Double);
 	}
 	
 	public enum ConfigType {
-		String, Boolean, Numeric 
+		String, Boolean, Integer, Double 
 	}
 	
 }
