@@ -10,9 +10,13 @@ import java.io.File;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 @SuppressWarnings("serial")
-public class MainFrame extends JFrame implements WindowListener, ActionListener {
+public class MainFrame extends JFrame implements WindowListener, ActionListener, ChangeListener {
 
 	private final JFileChooser fc = new JFileChooser();
 	private JButton button;
@@ -30,7 +34,7 @@ public class MainFrame extends JFrame implements WindowListener, ActionListener 
 		addWindowListener(this);
 		button = new JButton("Click me");
 		add(button);
-		button.addActionListener(this);		
+		button.addActionListener(this);
 		selectFileDialog.addConfirmActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -39,6 +43,30 @@ public class MainFrame extends JFrame implements WindowListener, ActionListener 
 			}
 		});
 		selectFileDialog.setVisible(false);
+		JTextField exampleTF = new JTextField(60);
+		exampleTF.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO: action to be executed on file select confirmation event
+				System.out.println(exampleTF.getText());
+			}
+		});
+		add(exampleTF);
+		JSlider slider = new JSlider(){
+			
+			@Override
+			protected void fireStateChanged() {
+				// TODO Auto-generated method stub
+				super.fireStateChanged();
+			}
+			
+		};
+		slider.addChangeListener(this);
+		slider.setPaintLabels(true);
+		slider.setPaintTicks(true);
+		slider.setMajorTickSpacing(10);
+		slider.setMinorTickSpacing(1);
+		add(slider);
 	}
 
 	@Override
@@ -62,7 +90,7 @@ public class MainFrame extends JFrame implements WindowListener, ActionListener 
 	}
 
 	@Override
-	public void windowOpened(WindowEvent e) {
+	public void windowOpened(WindowEvent e) { 
 		// TODO Auto-generated method stub
 		
 	}
@@ -96,5 +124,13 @@ public class MainFrame extends JFrame implements WindowListener, ActionListener 
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	@Override
+	public void stateChanged(ChangeEvent event) {
+		JSlider source = (JSlider) event.getSource();
+        if (!source.getValueIsAdjusting()) {
+        	System.out.println(source.getValue());
+        }
+	};
+	
 }
