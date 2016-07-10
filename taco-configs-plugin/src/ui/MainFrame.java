@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 
 import javax.swing.JButton;
@@ -20,6 +19,7 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import tacoconfigsplugin.popup.actions.Config;
 import tacoconfigsplugin.popup.actions.ParseConfigurations;
 
 @SuppressWarnings("serial")
@@ -57,13 +57,11 @@ public class MainFrame extends JFrame implements WindowListener, ActionListener,
 			}
 		});
 		selectFileDialog.setVisible(false);
-		HashMap<String, HashMap<String, String>> configMap = new ParseConfigurations(testFile).configurations();
+		HashMap<String, Config> configMap = new ParseConfigurations(testFile).configurations();
 		for (String method : configMap.keySet()) {
-			HashMap<String, String> configurations = configMap.get(method);
-			for (String configuration : configurations.keySet()) {
-				JLabel label = new JLabel(configuration);
-				add(label);
-			}
+			Config configuration = configMap.get(method);
+			JLabel label = new JLabel(configuration.name());
+			add(label);
 		}
 		JTextField exampleTF = new JTextField(60);
 		exampleTF.addActionListener(new ActionListener() {
