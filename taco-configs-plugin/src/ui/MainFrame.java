@@ -9,13 +9,16 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.SpringLayout;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -42,15 +45,21 @@ public class MainFrame extends JFrame implements WindowListener, ActionListener,
 		MainFrame mainFrame = new MainFrame("Taco Dressing Chooser");
 		mainFrame.setSize(800, 600);
 		mainFrame.setVisible(true);
+		mainFrame.setLayout(new SpringLayout());
+		SpringUtilities.makeCompactGrid(mainFrame, 2, 20, 6, 6, 6, 6);
 	}
 	
 	public MainFrame(String title) {
 		super(title);
-		setLayout(new FlowLayout());
+		this.setLayout(new FlowLayout());
 		addWindowListener(this);
 		button = new JButton("Click me");
 		add(button);
 		button.addActionListener(this);
+		
+		JPanel labelsPanel = new JPanel();
+		labelsPanel.setLayout(new BoxLayout(labelsPanel, BoxLayout.Y_AXIS));
+		
 		selectFileDialog.addConfirmActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -59,12 +68,40 @@ public class MainFrame extends JFrame implements WindowListener, ActionListener,
 		});
 		selectFileDialog.setVisible(false);
 		HashMap<String, List<Config>> configMap = new ParseConfigurations(testFile).configurations();
+		
+		//Create and populate the panel.
+//		JPanel p = new JPanel(new SpringLayout());
+//		for (int i = 0; i < numPairs; i++) {
+//		    JLabel l = new JLabel(labels[i], JLabel.TRAILING);
+//		    p.add(l);
+//		    JTextField textField = new JTextField(10);
+//		    l.setLabelFor(textField);
+//		    p.add(textField);
+//		}
+//
+//		//Lay out the panel.
+//		SpringUtilities.makeCompactGrid(p,
+//		                                numPairs, 2, //rows, cols
+//		                                6, 6,        //initX, initY
+//		                                6, 6);       //xPad, yPad
+//		JPanel panel = new JPanel(new SpringLayout());
 		for (String method : configMap.keySet()) {
 			for (Config config : configMap.get(method)) {
+				JPanel rowPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 				JLabel label = new JLabel(config.name());
-				add(label);
+				label.setVisible(true);
+				JTextField tField = new JTextField(10);
+				label.setLabelFor(tField);
+				rowPanel.add(label);
+				rowPanel.add(tField);
+				labelsPanel.add(rowPanel);
 			}
 		}
+//		SpringUtilities.makeCompactGrid(panel,
+//                configMap.keySet().size(), 2, //rows, cols
+//                6, 6,        //initX, initY
+//                6, 6);
+		
 		JTextField exampleTF = new JTextField(60);
 		exampleTF.addActionListener(new ActionListener() {
 			@Override
@@ -83,6 +120,8 @@ public class MainFrame extends JFrame implements WindowListener, ActionListener,
 		add(slider);
 		JCheckBox checkBox = new JCheckBox();
 		add(checkBox);
+//		add(panel);
+		add(labelsPanel);
 	}
 
 	@Override
