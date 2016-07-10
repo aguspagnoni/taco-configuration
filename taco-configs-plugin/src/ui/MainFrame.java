@@ -1,5 +1,6 @@
 package ui;
 
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,9 +17,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
-import javax.swing.SpringLayout;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -30,98 +31,81 @@ import tacoconfigsplugin.popup.actions.ParseConfigurations;
 public class MainFrame extends JFrame implements WindowListener, ActionListener, ChangeListener {
 
 	private final JFileChooser fc = new JFileChooser();
-	private JButton button;
 	private SelectFileDialog selectFileDialog = new SelectFileDialog(this, "Select File Dialog");
-	private String testFile = "/Users/falderet/repository/taco-configuration/taco-configs-plugin/src/tacoconfigsplugin/popup/actions/TestClass.java";
-	
+	//TODO: Get class name/path from eclipse plugin
+	private String testFile = "C:/Users/Federico/git/itba/avmc/taco-configuration/taco-configs-plugin/src/tacoconfigsplugin/popup/actions/TestClass.java";
+
 	public static void main(String[] args) {
 		try {
-			UIManager.setLookAndFeel(
-			        UIManager.getSystemLookAndFeelClassName());
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		MainFrame mainFrame = new MainFrame("Taco Dressing Chooser");
-		mainFrame.setSize(800, 600);
+		mainFrame.setSize(800, 768);
 		mainFrame.setVisible(true);
-		mainFrame.setLayout(new SpringLayout());
-		SpringUtilities.makeCompactGrid(mainFrame, 2, 20, 6, 6, 6, 6);
 	}
-	
+
 	public MainFrame(String title) {
 		super(title);
-		this.setLayout(new FlowLayout());
+		setLayout(new FlowLayout());
 		addWindowListener(this);
-		button = new JButton("Click me");
-		add(button);
-		button.addActionListener(this);
-		
 		JPanel labelsPanel = new JPanel();
 		labelsPanel.setLayout(new BoxLayout(labelsPanel, BoxLayout.Y_AXIS));
-		
+		JButton button = new JButton("Save");
+		labelsPanel.add(button);
+		button.addActionListener(this);
 		selectFileDialog.addConfirmActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO: action to be executed on file select confirmation event
+				// TODO: Guardar archivo modificado
 			}
 		});
 		selectFileDialog.setVisible(false);
 		HashMap<String, List<Config>> configMap = new ParseConfigurations(testFile).configurations();
-		
-		//Create and populate the panel.
-//		JPanel p = new JPanel(new SpringLayout());
-//		for (int i = 0; i < numPairs; i++) {
-//		    JLabel l = new JLabel(labels[i], JLabel.TRAILING);
-//		    p.add(l);
-//		    JTextField textField = new JTextField(10);
-//		    l.setLabelFor(textField);
-//		    p.add(textField);
-//		}
-//
-//		//Lay out the panel.
-//		SpringUtilities.makeCompactGrid(p,
-//		                                numPairs, 2, //rows, cols
-//		                                6, 6,        //initX, initY
-//		                                6, 6);       //xPad, yPad
-//		JPanel panel = new JPanel(new SpringLayout());
 		for (String method : configMap.keySet()) {
 			for (Config config : configMap.get(method)) {
 				JPanel rowPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 				JLabel label = new JLabel(config.name());
-				label.setVisible(true);
-				JTextField tField = new JTextField(10);
-				label.setLabelFor(tField);
 				rowPanel.add(label);
-				rowPanel.add(tField);
+				if (config.isBoolean()) {
+					JCheckBox checkBox = new JCheckBox();
+					checkBox.setSelected(config.booleanValue());
+					label.setLabelFor(checkBox);
+					rowPanel.add(checkBox);
+				} else if (config.isInteger()) {
+					JSlider slider = new JSlider();
+					slider.addChangeListener(this);
+					slider.setPaintLabels(true);
+					slider.setPaintTicks(true);
+					slider.setSize(new Dimension(200, 50));
+					slider.setMajorTickSpacing(1);
+					slider.setMaximum(5);
+					slider.setMinimum(0);
+					slider.setMinorTickSpacing(1);
+					slider.setValue(config.intValue());
+					rowPanel.add(slider);
+				} else if (config.isDouble() || config.isString()) {
+					JTextField tField = new JTextField(30);
+					label.setLabelFor(tField);
+					tField.setText(config.value());
+					rowPanel.add(tField);
+				}
 				labelsPanel.add(rowPanel);
 			}
 		}
-//		SpringUtilities.makeCompactGrid(panel,
-//                configMap.keySet().size(), 2, //rows, cols
-//                6, 6,        //initX, initY
-//                6, 6);
-		
-		JTextField exampleTF = new JTextField(60);
-		exampleTF.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO: action to be executed on file select confirmation event
-				System.out.println(exampleTF.getText());
-			}
-		});
-		add(exampleTF);
-		JSlider slider = new JSlider();
-		slider.addChangeListener(this);
-		slider.setPaintLabels(true);
-		slider.setPaintTicks(true);
-		slider.setMajorTickSpacing(10);
-		slider.setMinorTickSpacing(1);
-		add(slider);
-		JCheckBox checkBox = new JCheckBox();
-		add(checkBox);
-//		add(panel);
-		add(labelsPanel);
+		JScrollPane scrollPane = new JScrollPane(labelsPanel);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setBounds(50, 30, 500, 600);
+        JPanel contentPane = new JPanel(null);
+        contentPane.setPreferredSize(new Dimension(500, 400));
+        contentPane.add(scrollPane);
+        setContentPane(contentPane);
+        pack();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setVisible(true);
 	}
 
 	@Override
@@ -145,47 +129,47 @@ public class MainFrame extends JFrame implements WindowListener, ActionListener,
 	}
 
 	@Override
-	public void windowOpened(WindowEvent e) { 
+	public void windowOpened(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void windowClosed(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void windowIconified(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void windowDeiconified(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void windowActivated(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void windowDeactivated(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	@Override
 	public void stateChanged(ChangeEvent event) {
 		JSlider source = (JSlider) event.getSource();
-        if (!source.getValueIsAdjusting()) {
-        	System.out.println(source.getValue());
-        }
+		if (!source.getValueIsAdjusting()) {
+			System.out.println(source.getValue());
+		}
 	};
-	
+
 }

@@ -53,6 +53,14 @@ public class Config {
 		return configType.equals(ConfigType.Double);
 	}
 	
+	public boolean booleanValue() {
+		return Boolean.valueOf(value);
+	}
+	
+	public int intValue() {
+		return Integer.valueOf(value);
+	}
+	
 	public enum ConfigType {
 		String, Boolean, Integer, Double 
 	}

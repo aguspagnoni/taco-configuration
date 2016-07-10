@@ -34,9 +34,7 @@ public class ParseConfigurations {
 					if (line.contains(configMethodName)) {
 						List<Config> configs = configurations.get(currentMethodName);
 						String[] configNameAndValue = fetchConfig(line);
-//						TODO: Editar en fetchConfig configNameAndValue[2] poner el tipo de config seg�n ConfigType 
-//						Config config = new Config(configNameAndValue[0], configNameAndValue[1], ConfigType.valueOf(configNameAndValue[2]));
-						Config config = new Config(configNameAndValue[0], configNameAndValue[1], ConfigType.String);
+						Config config = new Config(configNameAndValue[0], configNameAndValue[1], ConfigType.valueOf(configNameAndValue[2]));
 						configs.add(config);
 					}
 				}
