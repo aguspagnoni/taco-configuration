@@ -6,14 +6,20 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import tacoconfigsplugin.popup.actions.ParseConfigurations;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame implements WindowListener, ActionListener, ChangeListener {
@@ -23,6 +29,22 @@ public class MainFrame extends JFrame implements WindowListener, ActionListener,
 	private SelectFileDialog selectFileDialog = new SelectFileDialog(this, "Select File Dialog");
 	
 	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel(
+			        UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		MainFrame mainFrame = new MainFrame("Main Frame");
 		mainFrame.setSize(800, 600);
 		mainFrame.setVisible(true);
@@ -39,7 +61,12 @@ public class MainFrame extends JFrame implements WindowListener, ActionListener,
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO: action to be executed on file select confirmation event
-				System.out.println(fc.getSelectedFile().getName());
+				try {
+					System.out.println(new ParseConfigurations(fc.getSelectedFile().getAbsolutePath()).configurations());
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		selectFileDialog.setVisible(false);
@@ -52,21 +79,15 @@ public class MainFrame extends JFrame implements WindowListener, ActionListener,
 			}
 		});
 		add(exampleTF);
-		JSlider slider = new JSlider(){
-			
-			@Override
-			protected void fireStateChanged() {
-				// TODO Auto-generated method stub
-				super.fireStateChanged();
-			}
-			
-		};
+		JSlider slider = new JSlider();
 		slider.addChangeListener(this);
 		slider.setPaintLabels(true);
 		slider.setPaintTicks(true);
 		slider.setMajorTickSpacing(10);
 		slider.setMinorTickSpacing(1);
 		add(slider);
+		JCheckBox checkBox = new JCheckBox();
+		add(checkBox);
 	}
 
 	@Override
