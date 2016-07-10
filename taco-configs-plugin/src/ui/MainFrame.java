@@ -7,15 +7,16 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -27,25 +28,17 @@ public class MainFrame extends JFrame implements WindowListener, ActionListener,
 	private final JFileChooser fc = new JFileChooser();
 	private JButton button;
 	private SelectFileDialog selectFileDialog = new SelectFileDialog(this, "Select File Dialog");
+	private String testFile = "C:/Users/Federico/git/itba/avmc/taco-configuration/taco-configs-plugin/src/tacoconfigsplugin/popup/actions/TestClass.java";
 	
 	public static void main(String[] args) {
 		try {
 			UIManager.setLookAndFeel(
 			        UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		MainFrame mainFrame = new MainFrame("Main Frame");
+		MainFrame mainFrame = new MainFrame("Taco Dressing Chooser");
 		mainFrame.setSize(800, 600);
 		mainFrame.setVisible(true);
 	}
@@ -61,15 +54,17 @@ public class MainFrame extends JFrame implements WindowListener, ActionListener,
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO: action to be executed on file select confirmation event
-				try {
-					System.out.println(new ParseConfigurations(fc.getSelectedFile().getAbsolutePath()).configurations());
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
 			}
 		});
 		selectFileDialog.setVisible(false);
+		HashMap<String, HashMap<String, String>> configMap = new ParseConfigurations(testFile).configurations();
+		for (String method : configMap.keySet()) {
+			HashMap<String, String> configurations = configMap.get(method);
+			for (String configuration : configurations.keySet()) {
+				JLabel label = new JLabel(configuration);
+				add(label);
+			}
+		}
 		JTextField exampleTF = new JTextField(60);
 		exampleTF.addActionListener(new ActionListener() {
 			@Override

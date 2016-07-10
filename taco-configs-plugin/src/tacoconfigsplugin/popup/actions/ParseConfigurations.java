@@ -6,32 +6,45 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 
+import jdk.internal.util.xml.impl.Pair;
+import tacoconfigsplugin.popup.actions.Config.ConfigType;
+
 public class ParseConfigurations {
 	private BufferedReader br;
-	private HashMap<String, HashMap<String, String>> configurations = new HashMap<String, HashMap<String, String>>();
+	private HashMap<String, Config> configurations = new HashMap<>();
 	public static String testMethodSignature = "public void test_";
 	public static String configMethodName = "setConfigKey";
 	
-	public ParseConfigurations(String filePath) throws FileNotFoundException, IOException {
-		br = new BufferedReader(new FileReader(filePath));
+	public ParseConfigurations(String filePath) {
+		try {
+			br = new BufferedReader(new FileReader(filePath));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	public HashMap<String, HashMap<String, String>> configurations() throws IOException {
+	public HashMap<String, Config> configurations() {
 		String line = "";
 		String currentMethodName = "";
-		while ((line = br.readLine()) != null) {
-			if (currentMethodName != "") {
-				if (line.contains(configMethodName)) {
-					HashMap<String, String> configs = configurations.get(currentMethodName);
-					String[] configNameAndValue = fetchConfig(line);
-					configs.put(configNameAndValue[0], configNameAndValue[1]);
-					configurations.put(currentMethodName, configs);
+		try {
+			while ((line = br.readLine()) != null) {
+				if (currentMethodName != "") {
+					if (line.contains(configMethodName)) {
+						String[] configNameAndValue = fetchConfig(line);
+						//TODO: Editar en fetchConfig configNameAndValue[2] poner el tipo de config según ConfigType 
+						Config config = new Config(configNameAndValue[0], configNameAndValue[1], ConfigType.valueOf(configNameAndValue[2]));
+						configurations.put(currentMethodName, config);
+					}
+				}
+				if (line.contains(testMethodSignature)) {
+					currentMethodName = fetchMethodName(line);
+					configurations.put(currentMethodName, null); 
 				}
 			}
-			if (line.contains(testMethodSignature)) {
-				currentMethodName = fetchMethodName(line);
-				configurations.put(currentMethodName, new HashMap<String, String>()); 
-			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return configurations;
 	}
