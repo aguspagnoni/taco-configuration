@@ -40,7 +40,7 @@ public class ParseConfigurations {
 				if (currentMethodName != "") {
 					if (line.contains(configMethodName)) {
 						List<Config> configs = configurations.get(currentMethodName);
-						// TODO: que fetchConfig devuelva un Config de una
+						// TODO: Que fetchConfig devuelva un Config de una
 						String[] configNameAndValue = fetchConfig(line);
 						Config config = new Config(configNameAndValue[0], configNameAndValue[1], ConfigType.valueOf(configNameAndValue[2]));
 						configs.add(config);

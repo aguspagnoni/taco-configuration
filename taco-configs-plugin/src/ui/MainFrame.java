@@ -30,7 +30,6 @@ import tacoconfigsplugin.popup.actions.ParseConfigurations;
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame implements ActionListener {
 
-	// TODO: Get class name/path from eclipse plugin
 	private static String testFile = "C:/Users/Federico/git/itba/avmc/taco-configuration/taco-configs-plugin/src/tacoconfigsplugin/popup/actions/TestClass.java";
 	private IPath path;
 	private List<JSlider> sliders = new ArrayList<>();
@@ -51,7 +50,6 @@ public class MainFrame extends JFrame implements ActionListener {
 		mainFrame.setVisible(true);
 	}
 
-	//TODO: Recibir por parametro el nombre del archivo
 	public MainFrame(String title, IPath path) {
 		super(title);
 		this.path = path;
