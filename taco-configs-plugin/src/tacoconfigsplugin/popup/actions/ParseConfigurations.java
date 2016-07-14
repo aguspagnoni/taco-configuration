@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.eclipse.ui.commands.KeyConfigurationEvent;
-
 import tacoconfigsplugin.popup.actions.Config.ConfigType;
 
 public class ParseConfigurations {
@@ -57,7 +55,7 @@ public class ParseConfigurations {
 	
 	public void setConfigurations (HashMap<String, List<Config>> configurations) {
 		String line = "";
-		List<String> newContent = new ArrayList<String>();
+		List<String> newContent = new ArrayList<>();
 		String currentMethodName = "";
 		try {
 			while ((line = br.readLine()) != null) {
@@ -166,12 +164,10 @@ public class ParseConfigurations {
 				totalMethodName += c;	
 			}
 		}
-		
 		if (configValueIndex != -1) {
 			return line.substring(0, configValueIndex) + newConfigValue + ");";
-		} else {
-			return line;
 		}
+		return line;
 	}
 	
 	private String fetchConfigObject(String configName, List<Config> configs) {
@@ -179,9 +175,8 @@ public class ParseConfigurations {
 			if (config.name().equals(configName)) {
 				if (config.type().equals(ConfigType.String)) {
 					return "\"" + config.value() + "\"";
-				} else {
-					return config.value();
 				}
+				return config.value();
 			}
 		}
 		return null;
