@@ -126,7 +126,7 @@ public class MainFrame extends JFrame implements ActionListener {
 				// System.out.println(jTextField.getName() + ": " + jTextField.getText());
 			}
 		}
-		parseConfig.setConfigurations(updatedConfigMap);
+		new ParseConfigurations(testFile).setConfigurations(updatedConfigMap);
 	}
 
 }
