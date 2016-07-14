@@ -32,6 +32,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private List<JSlider> sliders = new ArrayList<>();
 	private List<JTextField> textFields = new ArrayList<>();
 	private List<JCheckBox> checkboxes = new ArrayList<>();
+	private ParseConfigurations parseConfig;
 	private Map<String, List<Config>> configMap;
 
 	public static void main(String[] args) {
@@ -54,7 +55,8 @@ public class MainFrame extends JFrame implements ActionListener {
 		JButton button = new JButton("Save");
 		labelsPanel.add(button);
 		button.addActionListener(this);
-		configMap = new ParseConfigurations(testFile).configurations();
+		parseConfig = new ParseConfigurations(testFile);
+		configMap = parseConfig.configurations();
 		for (String method : configMap.keySet()) {
 			for (Config config : configMap.get(method)) {
 				JPanel rowPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
@@ -124,7 +126,7 @@ public class MainFrame extends JFrame implements ActionListener {
 				// System.out.println(jTextField.getName() + ": " + jTextField.getText());
 			}
 		}
-		new ParseConfigurations(testFile).setConfigurations(updatedConfigMap);
+		parseConfig.setConfigurations(updatedConfigMap);
 	}
 
 }
