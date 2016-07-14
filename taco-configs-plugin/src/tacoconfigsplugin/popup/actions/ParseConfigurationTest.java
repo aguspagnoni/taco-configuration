@@ -7,17 +7,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.Path;
+
 import tacoconfigsplugin.popup.actions.Config.ConfigType;
 
 public class ParseConfigurationTest {
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		Map<String, List<Config>> configs = new ParseConfigurations("/Users/gromarion/Documents/ITBA/AVMC/taco-configuration/taco-configs-plugin/src/tacoconfigsplugin/popup/actions/TestClass.java").configurations();
-		Map<String, List<Config>> confs = new HashMap<String, List<Config>>();
-		List<Config> confsList = new ArrayList<Config>();
+		Map<String, List<Config>> configs = new ParseConfigurations(new Path("/Users/gromarion/Documents/ITBA/AVMC/taco-configuration/taco-configs-plugin/src/tacoconfigsplugin/popup/actions/TestClass.java")).configurations();
+		Map<String, List<Config>> confs = new HashMap<>();
+		List<Config> confsList = new ArrayList<>();
 		confsList.add(new Config("RelevantClasses", "lalalala", ConfigType.String));
 		confs.put("test_find", confsList);
-		new ParseConfigurations("/Users/gromarion/Documents/ITBA/AVMC/taco-configuration/taco-configs-plugin/src/tacoconfigsplugin/popup/actions/TestClass.java").setConfigurations(confs);
+		new ParseConfigurations(new Path("/Users/gromarion/Documents/ITBA/AVMC/taco-configuration/taco-configs-plugin/src/tacoconfigsplugin/popup/actions/TestClass.java")).setConfigurations(confs);
 		System.out.println(configs);
 	}
 }

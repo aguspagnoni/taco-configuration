@@ -20,6 +20,9 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+
 import tacoconfigsplugin.popup.actions.Config;
 import tacoconfigsplugin.popup.actions.Config.ConfigType;
 import tacoconfigsplugin.popup.actions.ParseConfigurations;
@@ -28,7 +31,8 @@ import tacoconfigsplugin.popup.actions.ParseConfigurations;
 public class MainFrame extends JFrame implements ActionListener {
 
 	// TODO: Get class name/path from eclipse plugin
-	private String testFile = "C:/Users/Federico/git/itba/avmc/taco-configuration/taco-configs-plugin/src/tacoconfigsplugin/popup/actions/TestClass.java";
+	private static String testFile = "C:/Users/Federico/git/itba/avmc/taco-configuration/taco-configs-plugin/src/tacoconfigsplugin/popup/actions/TestClass.java";
+	private IPath path;
 	private List<JSlider> sliders = new ArrayList<>();
 	private List<JTextField> textFields = new ArrayList<>();
 	private List<JCheckBox> checkboxes = new ArrayList<>();
@@ -42,20 +46,22 @@ public class MainFrame extends JFrame implements ActionListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		MainFrame mainFrame = new MainFrame("Taco Dressing Chooser");
+		MainFrame mainFrame = new MainFrame("Taco Dressing Chooser", new Path(testFile));
 		mainFrame.setSize(800, 768);
 		mainFrame.setVisible(true);
 	}
 
-	public MainFrame(String title) {
+	//TODO: Recibir por parametro el nombre del archivo
+	public MainFrame(String title, IPath path) {
 		super(title);
+		this.path = path;
 		setLayout(new FlowLayout());
 		JPanel labelsPanel = new JPanel();
 		labelsPanel.setLayout(new BoxLayout(labelsPanel, BoxLayout.Y_AXIS));
 		JButton button = new JButton("Save");
 		labelsPanel.add(button);
 		button.addActionListener(this);
-		parseConfig = new ParseConfigurations(testFile);
+		parseConfig = new ParseConfigurations(path);
 		configMap = parseConfig.configurations();
 		for (String method : configMap.keySet()) {
 			for (Config config : configMap.get(method)) {
@@ -126,7 +132,7 @@ public class MainFrame extends JFrame implements ActionListener {
 				// System.out.println(jTextField.getName() + ": " + jTextField.getText());
 			}
 		}
-		new ParseConfigurations(testFile).setConfigurations(updatedConfigMap);
+		new ParseConfigurations(path).setConfigurations(updatedConfigMap);
 	}
 
 }

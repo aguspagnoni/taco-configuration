@@ -3,7 +3,7 @@ package tacoconfigsplugin.popup.actions;
 public class TestClass {
 	
 	public void test_find() throws VizException {
-		setConfigKeyRelevantClasses("ejercicios.AVLTree,ejercicios.AVLNode");
+		setConfigKeyRelevantClasses(""ejercicios.AVLTree,ejercicios.AVLNode"");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyCheckArithmeticException(false);
@@ -13,8 +13,8 @@ public class TestClass {
 		setConfigKeyRemoveQuantifiers(true);
 		// Infer-Scope
 		setConfigKeyInferScope(true);
-		setConfigKeyTypeScopes("ejercicios.AVLTree:1, ejercicios.AVLNode:6");
-		setConfigKeyLoopUnroll(2);
+		setConfigKeyTypeScopes(""ejercicios.AVLTree:1,ejercicios.AVLNode:6"");
+		setConfigKeyLoopUnroll(4);
 		// SBP+BOUND
 		setConfigKeyUseJavaSBP(false);
 		setConfigKeyUseTightUpperBounds(false);
@@ -25,7 +25,7 @@ public class TestClass {
 	}
 
 	public void test_insert() throws VizException {
-		setConfigKeyRelevantClasses("ejercicios.AVLTree,ejercicios.AVLNode");
+		setConfigKeyRelevantClasses(""ejercicios.AVLTree,ejercicios.AVLNode"");
 		setConfigKeyRelevancyAnalysis(true);
 		setConfigKeyCheckNullDereference(true);
 		setConfigKeyCheckArithmeticException(false);
@@ -35,8 +35,8 @@ public class TestClass {
 		setConfigKeyRemoveQuantifiers(true);
 		// Infer-Scope
 		setConfigKeyInferScope(true);
-		setConfigKeyTypeScopes("ejercicios.AVLTree:1, ejercicios.AVLNode:3, JavaPrimitiveIntegerValue:7");
-		setConfigKeyLoopUnroll(2);
+		setConfigKeyTypeScopes(""ejercicios.AVLTree:1,ejercicios.AVLNode:6"");
+		setConfigKeyLoopUnroll(4);
 		// SBP+BOUND
 		setConfigKeyUseJavaSBP(false);
 		setConfigKeyUseTightUpperBounds(false);

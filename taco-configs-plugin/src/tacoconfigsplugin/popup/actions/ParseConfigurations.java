@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IPath;
+
 import tacoconfigsplugin.popup.actions.Config.ConfigType;
 
 public class ParseConfigurations {
@@ -19,10 +21,10 @@ public class ParseConfigurations {
 	public static String testMethodSignature = "public void test_";
 	public static String configMethodName = "setConfigKey";
 
-	public ParseConfigurations(String filePath) {
+	public ParseConfigurations(IPath filePath) {
 		try {
-			this.filePath = filePath;
-			br = new BufferedReader(new FileReader(filePath));
+			this.filePath = filePath.toString();
+			br = new BufferedReader(new FileReader(this.filePath));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
