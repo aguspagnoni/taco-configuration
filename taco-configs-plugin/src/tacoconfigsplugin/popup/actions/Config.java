@@ -13,6 +13,14 @@ public class Config {
 		this.configType = configType;
 	}
 	
+	public Config(String name, Boolean value, ConfigType configType) {
+		this(name, value.toString(), configType);
+	}
+	
+	public Config(String name, Integer value, ConfigType configType) {
+		this(name, value.toString(), configType);
+	}
+	
 	public String name() {
 		return name;
 	}

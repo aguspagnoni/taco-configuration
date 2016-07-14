@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -18,10 +19,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import tacoconfigsplugin.popup.actions.Config;
+import tacoconfigsplugin.popup.actions.Config.ConfigType;
 import tacoconfigsplugin.popup.actions.ParseConfigurations;
 
 @SuppressWarnings("serial")
@@ -32,7 +32,8 @@ public class MainFrame extends JFrame implements ActionListener {
 	private List<JSlider> sliders = new ArrayList<>();
 	private List<JTextField> textFields = new ArrayList<>();
 	private List<JCheckBox> checkboxes = new ArrayList<>();
-	private HashMap<String, List<Config>> configMap;
+	private Map<String, List<Config>> configMap;
+
 	public static void main(String[] args) {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -106,16 +107,24 @@ public class MainFrame extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO: Guardar aca la config
-		for (JCheckBox jCheckBox : checkboxes) {
-			System.out.println(jCheckBox.getName() + ": " + jCheckBox.isSelected());
+		Map<String, List<Config>> updatedConfigMap = new HashMap<>();
+		for (String method : configMap.keySet()) {
+			updatedConfigMap.put(method, new ArrayList<>());
+			List<Config> config = updatedConfigMap.get(method);
+			for (JCheckBox jCheckBox : checkboxes) {
+				config.add(new Config(jCheckBox.getName(), jCheckBox.isSelected(), ConfigType.Boolean));
+				// System.out.println(jCheckBox.getName() + ": " + jCheckBox.isSelected());
+			}
+			for (JSlider jSlider : sliders) {
+				config.add(new Config(jSlider.getName(), jSlider.getValue(), ConfigType.Integer));
+				// System.out.println(jSlider.getName() + ": " + jSlider.getValue());
+			}
+			for (JTextField jTextField : textFields) {
+				config.add(new Config(jTextField.getName(), jTextField.getText(), ConfigType.String));
+				// System.out.println(jTextField.getName() + ": " + jTextField.getText());
+			}
 		}
-		for (JSlider jSlider : sliders) {
-			System.out.println(jSlider.getName() + ": " + jSlider.getValue());
-		}
-		for (JTextField jTextField : textFields) {
-			System.out.println(jTextField.getName() + ": " + jTextField.getText());
-		}
+		new ParseConfigurations(testFile).setConfigurations(updatedConfigMap);
 	}
 
 }

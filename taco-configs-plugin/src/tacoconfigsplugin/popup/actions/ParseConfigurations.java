@@ -8,27 +8,29 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import tacoconfigsplugin.popup.actions.Config.ConfigType;
 
 public class ParseConfigurations {
 	private BufferedReader br;
 	private String filePath;
-	private HashMap<String, List<Config>> configurations = new HashMap<>();
+	private Map<String, List<Config>> configurations = new HashMap<>();
 	public static String testMethodSignature = "public void test_";
 	public static String configMethodName = "setConfigKey";
-	
+
 	public ParseConfigurations(String filePath) {
 		try {
-			this.filePath = filePath; 
+			this.filePath = filePath;
 			br = new BufferedReader(new FileReader(filePath));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	public HashMap<String, List<Config>> configurations() {
+
+	// TODO: Esto debería además agregar las configs que no están
+	public Map<String, List<Config>> configurations() {
 		String line = "";
 		String currentMethodName = "";
 		try {
@@ -36,6 +38,7 @@ public class ParseConfigurations {
 				if (currentMethodName != "") {
 					if (line.contains(configMethodName)) {
 						List<Config> configs = configurations.get(currentMethodName);
+						// TODO: que fetchConfig devuelva un Config de una
 						String[] configNameAndValue = fetchConfig(line);
 						Config config = new Config(configNameAndValue[0], configNameAndValue[1], ConfigType.valueOf(configNameAndValue[2]));
 						configs.add(config);
@@ -43,7 +46,7 @@ public class ParseConfigurations {
 				}
 				if (line.contains(testMethodSignature)) {
 					currentMethodName = fetchMethodName(line);
-					configurations.put(currentMethodName, new ArrayList<Config>()); 
+					configurations.put(currentMethodName, new ArrayList<Config>());
 				}
 			}
 		} catch (IOException e) {
@@ -52,8 +55,8 @@ public class ParseConfigurations {
 		}
 		return configurations;
 	}
-	
-	public void setConfigurations (HashMap<String, List<Config>> configurations) {
+
+	public void setConfigurations(Map<String, List<Config>> configurations) {
 		String line = "";
 		List<String> newContent = new ArrayList<>();
 		String currentMethodName = "";
@@ -67,7 +70,7 @@ public class ParseConfigurations {
 						if (line.contains(configMethodName)) {
 							List<Config> configs = configurations.get(currentMethodName);
 							if (configs != null) {
-								newContent.add(lineToBeWritten(line, configs));							
+								newContent.add(lineToBeWritten(line, configs));
 							} else {
 								newContent.add(line);
 							}
@@ -81,7 +84,7 @@ public class ParseConfigurations {
 			}
 			PrintWriter writer = new PrintWriter(filePath, "UTF-8");
 			for (String string : newContent) {
-				writer.println(string);				
+				writer.println(string);
 			}
 			writer.close();
 		} catch (IOException e) {
@@ -89,12 +92,15 @@ public class ParseConfigurations {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private String fetchMethodName(String line) {
 		String methodName = line.split(" ")[2];
 		return methodName.substring(0, methodName.length() - 2);
 	}
-	
+
+	// TODO: Que esto devuelva un Config, no tiene sentido ir de config a string, y de string a config luego
+	// TODO: Hace transparente el tema de los strings con comillas "", que fetchconfig las quite y que setConfig las ponga, para que al mostrarlas no se vean y
+	// no generen problemas
 	private String[] fetchConfig(String line) {
 		String configName = "";
 		String configValue = "";
@@ -105,12 +111,12 @@ public class ParseConfigurations {
 		line = line.replaceAll("\t", "").replaceAll(" ", "").replaceAll("\n", "");
 		for (int i = 0; i < line.length() && !(configNameRead && configValueRead); i++) {
 			char c = line.charAt(i);
-			if (totalMethodName.equals(configMethodName))  {
+			if (totalMethodName.equals(configMethodName)) {
 				if (!configNameRead) {
 					if (c == '(') {
 						configNameRead = true;
 					} else {
-						configName += c; 
+						configName += c;
 					}
 				} else {
 					if (!configValueRead) {
@@ -122,24 +128,23 @@ public class ParseConfigurations {
 					}
 				}
 			} else {
-				totalMethodName += c;				
+				totalMethodName += c;
 			}
 		}
-		
 		if (isIntegerClass(configValue)) {
 			configType = ConfigType.Integer.toString();
-		} else if (isDoubleClass(configValue)){
+		} else if (isDoubleClass(configValue)) {
 			configType = ConfigType.Double.toString();
 		} else if (isBooleanClass(configValue)) {
 			configType = ConfigType.Boolean.toString();
 		} else {
 			configType = ConfigType.String.toString();
 		}
-		
-		String[] ans = {configName, configValue, configType};
+
+		String[] ans = { configName, configValue, configType };
 		return ans;
 	}
-	
+
 	private String lineToBeWritten(String line, List<Config> configurations) {
 		String configName = "";
 		String newConfigValue = "";
@@ -148,20 +153,20 @@ public class ParseConfigurations {
 		int configValueIndex = -1;
 		for (int i = 0; i < line.length() && !configNameRead; i++) {
 			char c = line.charAt(i);
-			if (totalMethodName.contains(configMethodName))  {
+			if (totalMethodName.contains(configMethodName)) {
 				if (!configNameRead) {
 					if (c == '(') {
 						configNameRead = true;
-						 newConfigValue = fetchConfigObject(configName, configurations);
+						newConfigValue = fetchConfigObject(configName, configurations);
 						if (newConfigValue != null) {
-							configValueIndex = i + 1;			
+							configValueIndex = i + 1;
 						}
 					} else {
 						configName += c;
 					}
 				}
 			} else {
-				totalMethodName += c;	
+				totalMethodName += c;
 			}
 		}
 		if (configValueIndex != -1) {
@@ -169,7 +174,7 @@ public class ParseConfigurations {
 		}
 		return line;
 	}
-	
+
 	private String fetchConfigObject(String configName, List<Config> configs) {
 		for (Config config : configs) {
 			if (config.name().equals(configName)) {
@@ -181,7 +186,7 @@ public class ParseConfigurations {
 		}
 		return null;
 	}
-	
+
 	boolean isIntegerClass(String value) {
 		try {
 			Integer.valueOf(value);
@@ -190,7 +195,7 @@ public class ParseConfigurations {
 			return false;
 		}
 	}
-	
+
 	boolean isDoubleClass(String value) {
 		try {
 			Double.valueOf(value);
@@ -199,9 +204,9 @@ public class ParseConfigurations {
 			return false;
 		}
 	}
-	
+
 	boolean isBooleanClass(String value) {
-		if(value.toLowerCase().equals("true") || value.toLowerCase().equals("false")) {
+		if (value.toLowerCase().equals("true") || value.toLowerCase().equals("false")) {
 			return true;
 		}
 		return false;
