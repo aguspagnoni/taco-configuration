@@ -108,7 +108,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		contentPane.add(scrollPane);
 		setContentPane(contentPane);
 		pack();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setVisible(true);
 	}
 
