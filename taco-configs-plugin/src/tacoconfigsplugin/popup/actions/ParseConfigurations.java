@@ -31,7 +31,7 @@ public class ParseConfigurations {
 		}
 	}
 
-	// TODO: Esto debería además agregar las configs que no están
+	// TODO: Esto deberï¿½a ademï¿½s agregar las configs que no estï¿½n
 	public Map<String, List<Config>> configurations() {
 		String line = "";
 		String currentMethodName = "";
@@ -124,7 +124,7 @@ public class ParseConfigurations {
 					if (!configValueRead) {
 						if (c == ')') {
 							configValueRead = true;
-						} else {
+						} else if (c != '"'){
 							configValue += c;
 						}
 					}
