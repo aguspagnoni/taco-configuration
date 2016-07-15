@@ -136,5 +136,4 @@ public class MainFrame extends JFrame implements ActionListener {
 		}
 		new ParseConfigurations(path).setConfigurations(updatedConfigMap);
 	}
-
 }

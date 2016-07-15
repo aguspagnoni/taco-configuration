@@ -1,9 +1,12 @@
 package tacoconfigsplugin.popup.actions;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IPath;
+import org.yaml.snakeyaml.Yaml;
 
 import tacoconfigsplugin.popup.actions.Config.ConfigType;
 
@@ -18,6 +22,7 @@ public class ParseConfigurations {
 	private BufferedReader br;
 	private String filePath;
 	private Map<String, List<Config>> configurations = new HashMap<>();
+	private List<Config> defaultConfigs = new ArrayList<>();
 	public static String testMethodSignature = "public void test_";
 	public static String configMethodName = "setConfigKey";
 
@@ -25,13 +30,13 @@ public class ParseConfigurations {
 		try {
 			this.filePath = filePath.toString();
 			br = new BufferedReader(new FileReader(this.filePath));
+			initializeDefaultConfigurations();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	// TODO: Esto deber�a adem�s agregar las configs que no est�n
 	public Map<String, List<Config>> configurations() {
 		String line = "";
 		String currentMethodName = "";
@@ -52,6 +57,7 @@ public class ParseConfigurations {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		appendMissingConfigurations();
 		return configurations;
 	}
 
@@ -227,6 +233,50 @@ public class ParseConfigurations {
 			lines.add(lastConfigIndex + 1, tabs + configMethodName + config.name() + "(" + value + ");");
 			configurations.remove(config);
 		}
+	}
+	
+	private void appendMissingConfigurations() {
+		for(String method : configurations.keySet()) {
+			List<Config> configsToAdd = new ArrayList<>();
+			List<Config> configs = configurations.get(method);
+			for (Config config : defaultConfigs) {
+				if (!configs.contains(config)) {
+					configsToAdd.add(config);
+				}
+			}
+			configs.addAll(configsToAdd);
+		}
+	}
+	
+	private void initializeDefaultConfigurations() {
+		final String fileName = "/Users/gromarion/Documents/ITBA/AVMC/taco-configuration/taco_conf.yml";
+	    Yaml yaml = new Yaml();
+
+	    try {
+	        InputStream ios = new FileInputStream(new File(fileName));
+
+	        Map<String, Map<String, String>> result = (Map<String, Map<String, String>>) yaml.load(ios);
+	        for (String name : result.keySet()) {   
+	            Map<String, String> config = result.get(name);
+	            ConfigType type = null;
+	            switch (config.get("klass")) {
+				case "String":
+					type = ConfigType.String;
+					break;
+				case "Boolean":
+					type = ConfigType.Boolean;
+					break;
+				case "Integer":
+					type = ConfigType.Integer;
+					break;
+				default:
+					break;
+				}
+	            defaultConfigs.add(new Config(name, config.get("default"), type));
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
 
 	boolean isIntegerClass(String value) {
