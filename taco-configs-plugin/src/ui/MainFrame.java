@@ -30,7 +30,7 @@ import tacoconfigsplugin.popup.actions.ParseConfigurations;
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame implements ActionListener {
 
-	private static String testFile = "C:/Users/Federico/git/itba/avmc/taco-configuration/taco-configs-plugin/src/tacoconfigsplugin/popup/actions/TestClass.java";
+	private static String testFile = "C:/Users/Federico/workspace/itba/avmc/taco-configuration/taco-configs-plugin/src/tacoconfigsplugin/popup/actions/TestClass.java";
 	private IPath path;
 	private List<JSlider> sliders = new ArrayList<>();
 	private List<JTextField> textFields = new ArrayList<>();
@@ -62,6 +62,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		parseConfig = new ParseConfigurations(path);
 		configMap = parseConfig.configurations();
 		for (String method : configMap.keySet()) {
+			labelsPanel.add(new JLabel("Method: " + method));
 			for (Config config : configMap.get(method)) {
 				JPanel rowPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 				JLabel label = new JLabel(config.name());
@@ -107,7 +108,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		contentPane.add(scrollPane);
 		setContentPane(contentPane);
 		pack();
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 	}
 
