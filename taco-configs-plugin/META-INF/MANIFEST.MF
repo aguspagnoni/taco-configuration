@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Taco-configs-plugin
+Bundle-Name: %Bundle-Name.0
 Bundle-SymbolicName: taco-configs-plugin;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Require-Bundle: org.eclipse.jdt.core;bundle-version="3.8.2",
@@ -8,3 +8,7 @@ Require-Bundle: org.eclipse.jdt.core;bundle-version="3.8.2",
  org.eclipse.core.resources;bundle-version="3.8.1",
  org.eclipse.core.expressions;bundle-version="3.4.401",
  org.eclipse.ui
+Export-Package: tacoconfigsplugin,
+ tacoconfigsplugin.popup,
+ tacoconfigsplugin.popup.actions,
+ ui
