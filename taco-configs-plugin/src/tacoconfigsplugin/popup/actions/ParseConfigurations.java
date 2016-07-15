@@ -18,6 +18,7 @@ public class ParseConfigurations {
 	private BufferedReader br;
 	private String filePath;
 	private Map<String, List<Config>> configurations = new HashMap<>();
+	private Map<String, List<String>> methods = new HashMap<>();
 	public static String testMethodSignature = "public void test_";
 	public static String configMethodName = "setConfigKey";
 
@@ -66,6 +67,13 @@ public class ParseConfigurations {
 					newContent.add(line);
 				} else {
 					if (currentMethodName != "") {
+						if (methods.get(currentMethodName) != null) {						
+							methods.get(currentMethodName).add(line);
+						} else {
+							List<String> lines = new ArrayList<String>();
+							lines.add(line);
+							methods.put(currentMethodName, lines);
+						}
 						if (line.contains(configMethodName)) {
 							List<Config> configs = configurations.get(currentMethodName);
 							if (configs != null) {
@@ -140,6 +148,7 @@ public class ParseConfigurations {
 
 	private String lineToBeWritten(String line, List<Config> configurations) {
 		String configName = "";
+		Config newConfigObject = null;
 		String newConfigValue = "";
 		String totalMethodName = "";
 		boolean configNameRead = false;
@@ -150,9 +159,15 @@ public class ParseConfigurations {
 				if (!configNameRead) {
 					if (c == '(') {
 						configNameRead = true;
-						newConfigValue = fetchConfigObject(configName, configurations);
-						if (newConfigValue != null) {
+						newConfigObject = fetchConfigObject(configName, configurations);
+						if (newConfigObject != null) {
 							configValueIndex = i + 1;
+							if (newConfigObject.type().equals(ConfigType.String)) {
+								newConfigValue = "\"" + newConfigObject.value() + "\"";
+							} else {
+								newConfigValue = newConfigObject.value();
+							}
+							configurations.remove(newConfigObject);
 						}
 					} else {
 						configName += c;
@@ -168,13 +183,10 @@ public class ParseConfigurations {
 		return line;
 	}
 
-	private String fetchConfigObject(String configName, List<Config> configs) {
+	private Config fetchConfigObject(String configName, List<Config> configs) {
 		for (Config config : configs) {
 			if (config.name().equals(configName)) {
-				if (config.type().equals(ConfigType.String)) {
-					return "\"" + config.value() + "\"";
-				}
-				return config.value();
+				return config;
 			}
 		}
 		return null;
