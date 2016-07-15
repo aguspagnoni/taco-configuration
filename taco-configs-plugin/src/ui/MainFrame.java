@@ -71,7 +71,7 @@ public class MainFrame extends JFrame implements ActionListener {
 					checkBox.setSelected(config.booleanValue());
 					label.setLabelFor(checkBox);
 					rowPanel.add(checkBox);
-					checkBox.setName(label.getText());
+					checkBox.setName(method + label.getText());
 					checkboxes.add(checkBox);
 				} else if (config.isInteger()) {
 					JSlider slider = new JSlider();
@@ -79,20 +79,20 @@ public class MainFrame extends JFrame implements ActionListener {
 					slider.setPaintTicks(true);
 					slider.setSize(new Dimension(200, 50));
 					slider.setMajorTickSpacing(1);
-					// TODO: Setear bien máximo
+					// TODO: Setear bien mï¿½ximo
 					slider.setMaximum(5);
 					slider.setMinimum(0);
 					slider.setMinorTickSpacing(1);
 					slider.setValue(config.intValue());
 					rowPanel.add(slider);
-					slider.setName(label.getText());
+					slider.setName(method + label.getText());
 					sliders.add(slider);
 				} else if (config.isDouble() || config.isString()) {
 					JTextField textField = new JTextField(45);
 					label.setLabelFor(textField);
 					textField.setText(config.value());
 					rowPanel.add(textField);
-					textField.setName(label.getText());
+					textField.setName(method + label.getText());
 					textFields.add(textField);
 				}
 				labelsPanel.add(rowPanel);
@@ -118,16 +118,19 @@ public class MainFrame extends JFrame implements ActionListener {
 			updatedConfigMap.put(method, new ArrayList<>());
 			List<Config> config = updatedConfigMap.get(method);
 			for (JCheckBox jCheckBox : checkboxes) {
-				config.add(new Config(jCheckBox.getName(), jCheckBox.isSelected(), ConfigType.Boolean));
-				// System.out.println(jCheckBox.getName() + ": " + jCheckBox.isSelected());
+				if (jCheckBox.getName().contains(method)) {
+					config.add(new Config(jCheckBox.getName().replace(method, ""), jCheckBox.isSelected(), ConfigType.Boolean));					
+				}
 			}
 			for (JSlider jSlider : sliders) {
-				config.add(new Config(jSlider.getName(), jSlider.getValue(), ConfigType.Integer));
-				// System.out.println(jSlider.getName() + ": " + jSlider.getValue());
+				if (jSlider.getName().contains(method)) {
+					config.add(new Config(jSlider.getName().replace(method, ""), jSlider.getValue(), ConfigType.Integer));
+				}
 			}
 			for (JTextField jTextField : textFields) {
-				config.add(new Config(jTextField.getName(), jTextField.getText(), ConfigType.String));
-				// System.out.println(jTextField.getName() + ": " + jTextField.getText());
+				if (jTextField.getName().contains(method)) {
+					config.add(new Config(jTextField.getName().replace(method, ""), jTextField.getText(), ConfigType.String));
+				}
 			}
 		}
 		new ParseConfigurations(path).setConfigurations(updatedConfigMap);

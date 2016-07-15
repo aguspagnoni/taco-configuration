@@ -40,10 +40,7 @@ public class ParseConfigurations {
 				if (currentMethodName != "") {
 					if (line.contains(configMethodName)) {
 						List<Config> configs = configurations.get(currentMethodName);
-						// TODO: Que fetchConfig devuelva un Config de una
-						String[] configNameAndValue = fetchConfig(line);
-						Config config = new Config(configNameAndValue[0], configNameAndValue[1], ConfigType.valueOf(configNameAndValue[2]));
-						configs.add(config);
+						configs.add(fetchConfig(line));
 					}
 				}
 				if (line.contains(testMethodSignature)) {
@@ -100,14 +97,11 @@ public class ParseConfigurations {
 		return methodName.substring(0, methodName.length() - 2);
 	}
 
-	// TODO: Que esto devuelva un Config, no tiene sentido ir de config a string, y de string a config luego
-	// TODO: Hace transparente el tema de los strings con comillas "", que fetchconfig las quite y que setConfig las ponga, para que al mostrarlas no se vean y
-	// no generen problemas
-	private String[] fetchConfig(String line) {
+	private Config fetchConfig(String line) {
 		String configName = "";
 		String configValue = "";
 		String totalMethodName = "";
-		String configType = "";
+		ConfigType configType = ConfigType.String;
 		boolean configNameRead = false;
 		boolean configValueRead = false;
 		line = line.replaceAll("\t", "").replaceAll(" ", "").replaceAll("\n", "");
@@ -134,17 +128,14 @@ public class ParseConfigurations {
 			}
 		}
 		if (isIntegerClass(configValue)) {
-			configType = ConfigType.Integer.toString();
+			configType = ConfigType.Integer;
 		} else if (isDoubleClass(configValue)) {
-			configType = ConfigType.Double.toString();
+			configType = ConfigType.Double;
 		} else if (isBooleanClass(configValue)) {
-			configType = ConfigType.Boolean.toString();
-		} else {
-			configType = ConfigType.String.toString();
+			configType = ConfigType.Boolean;
 		}
 
-		String[] ans = { configName, configValue, configType };
-		return ans;
+		return new Config(configName, configValue, configType);
 	}
 
 	private String lineToBeWritten(String line, List<Config> configurations) {
