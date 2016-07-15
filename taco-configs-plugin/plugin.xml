@@ -10,7 +10,7 @@
          	   class="tacoconfigsplugin.popup.actions.ChangeSettings"
                icon="super_taco.png"
                id="taco-configs-plugin.menu1"
-               label="Taco Gromack"
+               label="Taco Dressings"
                path="additions">
          </action>
       </objectContribution>
