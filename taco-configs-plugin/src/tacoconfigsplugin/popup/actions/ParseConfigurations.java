@@ -251,11 +251,11 @@ public class ParseConfigurations {
 	}
 	
 	private void initializeDefaultConfigurations() {
-		final String fileName = System.getProperty("user.dir") + "taco_conf.yml";
+		ClassLoader classLoader = getClass().getClassLoader();;
 	    Yaml yaml = new Yaml();
 
 	    try {
-	        InputStream ios = new FileInputStream(new File(fileName));
+	        InputStream ios = new FileInputStream(new File(classLoader.getResource("taco_conf.yml").getFile()));
 
 	        Map<String, Map<String, String>> result = (Map<String, Map<String, String>>) yaml.load(ios);
 	        for (String name : result.keySet()) {   
