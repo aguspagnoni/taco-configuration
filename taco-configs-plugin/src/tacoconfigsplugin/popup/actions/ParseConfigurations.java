@@ -249,7 +249,7 @@ public class ParseConfigurations {
 	}
 	
 	private void initializeDefaultConfigurations() {
-		final String fileName = "/Users/gromarion/Documents/ITBA/AVMC/taco-configuration/taco_conf.yml";
+		final String fileName = System.getProperty("user.dir") + "taco_conf.yml";
 	    Yaml yaml = new Yaml();
 
 	    try {

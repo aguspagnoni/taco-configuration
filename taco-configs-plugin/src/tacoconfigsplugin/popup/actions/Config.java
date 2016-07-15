@@ -70,7 +70,7 @@ public class Config {
 	}
 	
 	public enum ConfigType {
-		String, Boolean, Integer, Double 
+		String, Boolean, Integer, Double
 	}
 	
 	public String toString() {
