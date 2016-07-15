@@ -18,7 +18,6 @@ public class ParseConfigurations {
 	private BufferedReader br;
 	private String filePath;
 	private Map<String, List<Config>> configurations = new HashMap<>();
-	private Map<String, List<String>> methods = new HashMap<>();
 	public static String testMethodSignature = "public void test_";
 	public static String configMethodName = "setConfigKey";
 
@@ -60,20 +59,15 @@ public class ParseConfigurations {
 		String line = "";
 		List<String> newContent = new ArrayList<>();
 		String currentMethodName = "";
+		int bracesAmount = 0;
 		try {
 			while ((line = br.readLine()) != null) {
 				if (line.contains(testMethodSignature)) {
 					currentMethodName = fetchMethodName(line);
+					bracesAmount++;
 					newContent.add(line);
 				} else {
 					if (currentMethodName != "") {
-						if (methods.get(currentMethodName) != null) {						
-							methods.get(currentMethodName).add(line);
-						} else {
-							List<String> lines = new ArrayList<String>();
-							lines.add(line);
-							methods.put(currentMethodName, lines);
-						}
 						if (line.contains(configMethodName)) {
 							List<Config> configs = configurations.get(currentMethodName);
 							if (configs != null) {
@@ -82,6 +76,18 @@ public class ParseConfigurations {
 								newContent.add(line);
 							}
 						} else {
+							if (line.contains("{")) {
+								bracesAmount++;
+							}
+							if (line.contains("}")) {
+								bracesAmount--;
+								if (bracesAmount == 0) {
+									if (currentMethodName != "" && configurations.get(currentMethodName) != null && configurations.get(currentMethodName).size() > 0) {
+										addMissingConfigurations(newContent, configurations.get(currentMethodName));
+									}
+									currentMethodName = "";
+								}
+							}
 							newContent.add(line);
 						}
 					} else {
@@ -91,7 +97,9 @@ public class ParseConfigurations {
 			}
 			PrintWriter writer = new PrintWriter(filePath, "UTF-8");
 			for (String string : newContent) {
-				writer.println(string);
+				if (string != null) {
+					writer.println(string);					
+				}
 			}
 			writer.close();
 		} catch (IOException e) {
@@ -190,6 +198,35 @@ public class ParseConfigurations {
 			}
 		}
 		return null;
+	}
+	
+	private void addMissingConfigurations(List<String> lines, List<Config> configurations) {
+		int lastConfigIndex = -1;
+		for (int i = lines.size() - 1; i >= 0; i--) {
+			if (lines.get(i).contains(configMethodName)) {
+				lastConfigIndex = i + 1;
+				break;
+			}
+		}
+		List<String> finalLines = new ArrayList<String>();
+		for(String line : lines.subList(lastConfigIndex, lines.size())) {
+			finalLines.add(line);			
+		}
+		String lastLine = finalLines.get(finalLines.size() - 1);
+		int tabsAmount = lastLine.length() - lastLine.replace("\t", "").length();
+		String tabs = "";
+		while (tabsAmount-- > 0) {
+			tabs += "\t";
+		}
+		while(configurations.size() > 0) {
+			Config config = configurations.get(configurations.size() - 1);
+			String value = config.value();
+			if (config.type() == ConfigType.String) {
+				value = "\"" + value + "\"";
+			}
+			lines.add(lastConfigIndex + 1, tabs + configMethodName + config.name() + "(" + value + ");");
+			configurations.remove(config);
+		}
 	}
 
 	boolean isIntegerClass(String value) {
