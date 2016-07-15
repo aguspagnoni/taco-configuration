@@ -37,6 +37,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private List<JCheckBox> checkboxes = new ArrayList<>();
 	private ParseConfigurations parseConfig;
 	private Map<String, List<Config>> configMap;
+	private static String rangeID = "gromack_123";
 
 	public static void main(String[] args) {
 		try {
@@ -95,6 +96,13 @@ public class MainFrame extends JFrame implements ActionListener {
 					rowPanel.add(textField);
 					textField.setName(method + label.getText());
 					textFields.add(textField);
+				} else if (config.isRange()) {
+					JTextField textField = new JTextField(45);
+					label.setLabelFor(textField);
+					textField.setText(config.value());
+					rowPanel.add(textField);
+					textField.setName(method + label.getText() + rangeID);
+					textFields.add(textField);
 				}
 				labelsPanel.add(rowPanel);
 			}
@@ -130,7 +138,8 @@ public class MainFrame extends JFrame implements ActionListener {
 			}
 			for (JTextField jTextField : textFields) {
 				if (jTextField.getName().contains(method)) {
-					config.add(new Config(jTextField.getName().replace(method, ""), jTextField.getText(), ConfigType.String));
+					ConfigType type = jTextField.getName().contains(rangeID) ? ConfigType.Range : ConfigType.String;  
+					config.add(new Config(jTextField.getName().replace(method, "").replace(rangeID, ""), jTextField.getText(), type));
 				}
 			}
 		}

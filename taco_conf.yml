@@ -72,7 +72,7 @@ KeyNoVerify:
     klass: "Boolean"
 KeyNumericTypeQuantificationRange:
     modify: true
-    klass: "String"
+    klass: "Range"
     default: "0, 3"
 KeyObjectScope:
     modify: true

@@ -155,6 +155,8 @@ public class ParseConfigurations {
 			configType = ConfigType.Double;
 		} else if (isBooleanClass(configValue)) {
 			configType = ConfigType.Boolean;
+		} else if (isRangeClass(configValue)) {
+			configType = ConfigType.Range;
 		}
 
 		return new Config(configName, configValue, configType);
@@ -269,6 +271,9 @@ public class ParseConfigurations {
 				case "Integer":
 					type = ConfigType.Integer;
 					break;
+				case "Range":
+					type = ConfigType.Range;
+					break;
 				default:
 					break;
 				}
@@ -303,4 +308,13 @@ public class ParseConfigurations {
 		}
 		return false;
 	}
+	
+	boolean isRangeClass(String value) {
+		String[] values = value.split(",");
+		if (values.length == 2) {
+			return isIntegerClass(values[0]) && isIntegerClass(values[1]);
+		} else {
+			return false;
+		}
+	} 
 }

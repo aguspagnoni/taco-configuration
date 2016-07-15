@@ -61,6 +61,10 @@ public class Config {
 		return configType.equals(ConfigType.Double);
 	}
 	
+	public boolean isRange() {
+		return configType.equals(ConfigType.Range);
+	}
+	
 	public boolean booleanValue() {
 		return Boolean.valueOf(value);
 	}
@@ -70,7 +74,7 @@ public class Config {
 	}
 	
 	public enum ConfigType {
-		String, Boolean, Integer, Double
+		String, Boolean, Integer, Double, Range
 	}
 	
 	public String toString() {
