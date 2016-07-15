@@ -1,8 +1,6 @@
 package tacoconfigsplugin.popup.actions;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -251,12 +249,10 @@ public class ParseConfigurations {
 	}
 	
 	private void initializeDefaultConfigurations() {
-		ClassLoader classLoader = getClass().getClassLoader();;
 	    Yaml yaml = new Yaml();
+	    InputStream ios = ParseConfigurations.class.getResourceAsStream("taco_conf.yml");
 
 	    try {
-	        InputStream ios = new FileInputStream(new File(classLoader.getResource("taco_conf.yml").getFile()));
-
 	        Map<String, Map<String, String>> result = (Map<String, Map<String, String>>) yaml.load(ios);
 	        for (String name : result.keySet()) {   
 	            Map<String, String> config = result.get(name);
